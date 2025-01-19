@@ -3,6 +3,23 @@ import csv
 import pandas as pd
 from gekko import GEKKO
 
+#Gets data from website.
+response = requests.get(url, headers=headers)
+
+playerData = response.json()
+
+filtered_players = []
+
+for i in range(612):
+    if(playerData['elements'][i]['chance_of_playing_next_round'] == None):
+        filtered_players.append(playerData['elements'][i])
+    elif(playerData['elements'][i]['chance_of_playing_next_round'] >= 75):
+        filtered_players.append(playerData['elements'][i])
+
+filtered_data = pd.DataFrame(filtered_players)
+
+filtered_data.to_csv("Premier_League_Matchday_1.csv", index=False)
+
 with open("Premier_League_Matchday_1.csv",
           encoding='utf-8', newline='') as csvfile:
     reader = csv.reader(csvfile)
